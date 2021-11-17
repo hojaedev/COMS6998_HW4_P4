@@ -46,7 +46,7 @@ def save_checkpoint(model, optimizer, save_path, epoch):
     }, save_path)
 
 # Training
-def train(net, epoch, training_file_path, result):
+def train(net, epoch, training_file_path, result, optimizer):
     print('\nEpoch: %d' % (epoch + 1))
     net.train()
     train_loss = 0
@@ -109,7 +109,7 @@ def do_train(GPU_TYPE = 'P100'):
 
         result = []
         for epoch in range(EPOCHS):
-            train(model, epoch, training_file_path_base + '.model', result)
+            train(model, epoch, training_file_path_base + '.model', result, optimizer)
             scheduler.step()
 
         with open(training_file_path_base + '.pickle', 'wb') as f:
