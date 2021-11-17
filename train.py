@@ -83,32 +83,34 @@ def train(net, epoch, training_file_path, result):
     save_checkpoint(model, optimizer, training_file_path, epoch)
 
 
-GPU_TYPE = 'P100'
-depths = [
-    (resnet18, 'resnet18'),
-    (resnet20, 'resnet20'),
-    (resnet32, 'resnet32'),
-    (resnet44, 'resnet44'),
-    (resnet56, 'resnet56'),
-    (resnet50, 'resnet50')
-]
+    
+    
+def do_train(GPU_TYPE = 'P100'):
+    depths = [
+        (resnet18, 'resnet18'),
+        (resnet20, 'resnet20'),
+        (resnet32, 'resnet32'),
+        (resnet44, 'resnet44'),
+        (resnet56, 'resnet56'),
+        (resnet50, 'resnet50')
+    ]
 
-EPOCHS = 150
+    EPOCHS = 150
 
-for net, name in depths:
-    # Model
-    model = net()
-    model = model.to(device)
+    for net, name in depths:
+        # Model
+        model = net()
+        model = model.to(device)
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-    training_file_path_base = f'{name}_{GPU_TYPE}'
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+        training_file_path_base = f'{name}_{GPU_TYPE}'
 
-    result = []
-    for epoch in range(EPOCHS):
-        train(model, epoch, training_file_path_base + '.model', result)
-        scheduler.step()
+        result = []
+        for epoch in range(EPOCHS):
+            train(model, epoch, training_file_path_base + '.model', result)
+            scheduler.step()
 
-    with open(training_file_path_base + '.pickle', 'wb') as f:
-        pickle.dump(result, f)
+        with open(training_file_path_base + '.pickle', 'wb') as f:
+            pickle.dump(result, f)
