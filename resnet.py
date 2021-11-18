@@ -37,7 +37,7 @@ from torch.autograd import Variable
 _all_ = ['ResNet', 'resnet20', 'resnet32', 'resnet44', 'resnet56', 'resnet110', 'resnet1202']
 
 def _weights_init(m):
-    classname = m._class.name_
+    #classname = m.__class__.name
     #print(classname)
     if isinstance(m, nn.Linear) or isinstance(m, nn.Conv2d):
         init.kaiming_normal_(m.weight)
