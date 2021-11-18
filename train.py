@@ -103,7 +103,7 @@ def do_train(GPU_TYPE = 'P100', EPOCHS = 150):
         model = model.to(device)
 
         criterion = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+        optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
         training_file_path_base = f'{name}_{GPU_TYPE}'
 
@@ -114,3 +114,6 @@ def do_train(GPU_TYPE = 'P100', EPOCHS = 150):
 
         with open(training_file_path_base + '.pickle', 'wb') as f:
             pickle.dump(result, f)
+
+if __name__ == '__main__':
+    do_train()
