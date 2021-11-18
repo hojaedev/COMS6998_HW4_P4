@@ -64,3 +64,6 @@ def do_test(GPU_TYPE = 'P100'):
         print('Name:', name)
         print('Accuracy of the network on the 10000 test images: %d %%' % (
             100 * correct / total))
+
+if __name__ == '__main__':
+    do_test()
