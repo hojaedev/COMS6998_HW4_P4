@@ -43,8 +43,8 @@ def _weights_init(m):
         init.kaiming_normal_(m.weight)
 
 class LambdaLayer(nn.Module):
-    def _init_(self, lambd):
-        super(LambdaLayer, self)._init_()
+    def __init__(self, lambd):
+        super(LambdaLayer, self).__init__()
         self.lambd = lambd
 
     def forward(self, x):
@@ -55,7 +55,7 @@ class BasicBlock(nn.Module):
     expansion = 1
 
     def __init__(self, in_planes, planes, stride=1, option='A'):
-        super(BasicBlock, self)._init_()
+        super(BasicBlock, self).__init__()
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=1, padding=1, bias=False)
@@ -85,7 +85,7 @@ class BasicBlock(nn.Module):
 
 class ResNet(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10):
-        super(ResNet, self)._init_()
+        super(ResNet, self).__init__()
         self.in_planes = 16
 
         self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False)
