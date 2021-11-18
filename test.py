@@ -18,49 +18,48 @@ depths = [
     (resnet50, 'resnet50')
 ]
 
-GPU_TYPE = 'P100'
+def do_test(GPU_TYPE = 'P100'):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    transform = transforms.Compose(
+        [transforms.ToTensor(),
+         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    batch_size = 128
 
-batch_size = 128
+    testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                           download=True, transform=transform)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
+                                             shuffle=False, num_workers=2)
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False, num_workers=2)
-
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+    classes = ('plane', 'car', 'bird', 'cat',
+               'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
-for model_generator, name in depths:
-    model = model_generator()
-    model.to(device)
-    path_base = f'{name}_{GPU_TYPE}'
-    saved = torch.load(path_base + '.model')
+    for model_generator, name in depths:
+        model = model_generator()
+        model.to(device)
+        path_base = f'{name}_{GPU_TYPE}'
+        saved = torch.load(path_base + '.model')
 
-    model.load_state_dict(saved['model_state_dict'])
-    model.eval()
+        model.load_state_dict(saved['model_state_dict'])
+        model.eval()
 
-    correct = 0
-    total = 0
+        correct = 0
+        total = 0
 
-    with torch.no_grad():
-        for data in testloader:
-            images, labels = data
-            images = images.to(device)
-            labels = labels.to(device)
-            # calculate outputs by running images through the network
-            outputs = model(images)
-            # the class with the highest energy is what we choose as prediction
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+        with torch.no_grad():
+            for data in testloader:
+                images, labels = data
+                images = images.to(device)
+                labels = labels.to(device)
+                # calculate outputs by running images through the network
+                outputs = model(images)
+                # the class with the highest energy is what we choose as prediction
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
 
-    print('Name:', name)
-    print('Accuracy of the network on the 10000 test images: %d %%' % (
-        100 * correct / total))
+        print('Name:', name)
+        print('Accuracy of the network on the 10000 test images: %d %%' % (
+            100 * correct / total))
