@@ -54,7 +54,7 @@ class LambdaLayer(nn.Module):
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def _init_(self, in_planes, planes, stride=1, option='A'):
+    def __init__(self, in_planes, planes, stride=1, option='A'):
         super(BasicBlock, self)._init_()
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
@@ -84,7 +84,7 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def _init_(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, num_classes=10):
         super(ResNet, self)._init_()
         self.in_planes = 16
 
