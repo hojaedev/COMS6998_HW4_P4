@@ -85,7 +85,7 @@ def train(net, epoch, training_file_path, result, optimizer, criterion, model):
 
     
     
-def do_train(GPU_TYPE = 'P100'):
+def do_train(GPU_TYPE = 'P100', EPOCHS = 150):
     depths = [
         (resnet18, 'resnet18'),
         (resnet20, 'resnet20'),
@@ -95,7 +95,6 @@ def do_train(GPU_TYPE = 'P100'):
         (resnet50, 'resnet50')
     ]
 
-    EPOCHS = 150
 
     for net, name in depths:
         # Model
