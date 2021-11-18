@@ -50,6 +50,14 @@ class LambdaLayer(nn.Module):
     def forward(self, x):
         return self.lambd(x)
 
+class LambdaLayer(nn.Module):
+    def __init__(self, lambd):
+        super(LambdaLayer, self).__init__()
+        self.lambd = lambd
+
+    def forward(self, x):
+        return self.lambd(x)
+
 
 class BasicBlock(nn.Module):
     expansion = 1
