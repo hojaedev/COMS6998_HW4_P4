@@ -21,9 +21,10 @@ depths = [
 def do_test(GPU_TYPE = 'P100'):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    transform = transforms.Compose(
-        [transforms.ToTensor(),
-         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+    transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    ])
 
     batch_size = 128
 
